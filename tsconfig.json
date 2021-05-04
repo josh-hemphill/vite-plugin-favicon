@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"target": "es2017",
+		"moduleResolution": "node",
+		"strict": true,
+		"declaration": true,
+		"noUnusedLocals": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"outDir": "dist",
+		"lib": [
+			"dom",
+			"esnext"
+		],
+		"types": [
+			"vite/client",
+			"jest",
+			"node"
+		],
+		"sourceMap": false,
+		"noEmitOnError": true
+	},
+	"include": [
+		"src/**/*",
+		"tests/**/*"
+	],
+	"exclude": [
+		"**/dist",
+		"**/node_modules"
+	]
+}
