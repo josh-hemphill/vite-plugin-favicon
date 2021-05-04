@@ -13,7 +13,7 @@
 		"test": "run-s test:*",
 		"test:lint": "eslint src --ext .ts",
 		"test:markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
-		"test:spelling": "cspell --config config/cspell.json \"{README.md,.github/*.md,src/**/*.ts,docs/**/*.md}\"",
+		"test:spelling": "cspell --config ./cSpell.json \"{README.md,.github/*.md,src/**/*.ts,docs/**/*.md}\"",
 		"test:unit": "jest -c config/jest.config.ts -b --forceExit --coverage --runInBand ",
 		"test:watch": "jest -c config/jest.config.ts -b --forceExit --runInBand --watch",
 		"cov:send": "run-s build test && codecov",
