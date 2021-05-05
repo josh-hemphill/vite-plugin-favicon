@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-favicon",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Create and manage favicons for vite bundles, mostily compatible with the config of favicons-webpack-plugin",
 	"type": "module",
 	"scripts": {

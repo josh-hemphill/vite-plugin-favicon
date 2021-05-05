@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.2...v1.0.3) (2021-05-05)
+
+
+### Bug Fixes
+
+* :bug: fix external type inclusion ([c75c979](https://github.com/josh-hemphill/vite-plugin-favicon/commit/c75c979c192126fffd3a46dc98a60e265eb3972b))
+
 ## [1.0.2](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.1...v1.0.2) (2021-05-05)
 
 
