@@ -5,8 +5,9 @@ import Oracle from './oracle.js';
 import path from 'path';
 import { getDefaultFaviconConfig } from './faviconsDefaults.js';
 import { parseFragment } from 'parse5';
+import type { FaviconOptions } from './faviconsTypes.js';
 
-type FaviconsConfig = Partial<favicons.FaviconOptions>
+type FaviconsConfig = Partial<FaviconOptions>
 export type ViteFaviconsPluginOptions = {
 	/** Your source logo (Will default to )
 		@default "assets/logo.png"
