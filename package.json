@@ -15,7 +15,7 @@
 		"test:markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#CHANGELOG.md\"",
 		"test:spelling": "cspell --config ./cSpell.json \"{README.md,.github/*.md,src/**/*.ts,docs/**/*.md}\"",
 		"test:unit": "jest -c config/jest.config.ts -b --forceExit --coverage --runInBand ",
-		"test:watch": "jest -c config/jest.config.ts -b --forceExit --runInBand --watch",
+		"watch:test": "jest -c config/jest.config.ts -b --forceExit --runInBand --watch",
 		"cov:send": "run-s build test && codecov",
 		"doc": "run-s doc:html && open-cli build/docs/index.html",
 		"doc:html": "typedoc src/ --exclude **/*.test.ts --target ES6 --mode file --out build/docs",
