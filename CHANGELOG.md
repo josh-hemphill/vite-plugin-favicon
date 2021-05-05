@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.4...v1.0.5) (2021-05-05)
+
+
+### Bug Fixes
+
+* :bug: fix spelling of config ([81339dc](https://github.com/josh-hemphill/vite-plugin-favicon/commit/81339dc29838b90b7b2e280c40420daba9ec233d))
+
 ## [1.0.4](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.3...v1.0.4) (2021-05-05)
 
 
