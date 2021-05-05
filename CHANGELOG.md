@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.1...v1.0.2) (2021-05-05)
+
+
+### Bug Fixes
+
+* :bug: fix publish ci and description ([d425edd](https://github.com/josh-hemphill/vite-plugin-favicon/commit/d425edd85ceab784da6d3bc5967c0cc9e1a30af5))
+
 ## [1.0.1](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.0...v1.0.1) (2021-05-05)
 
 
