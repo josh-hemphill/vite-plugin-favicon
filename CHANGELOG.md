@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.5...v1.0.6) (2021-05-05)
+
+
+### Bug Fixes
+
+* :bug: favicons-webpack-plugin config compat ([f148f16](https://github.com/josh-hemphill/vite-plugin-favicon/commit/f148f16ba8e70938ce225053784e54afd0745024))
+
 ## [1.0.5](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.4...v1.0.5) (2021-05-05)
 
 ### Bug Fixes
