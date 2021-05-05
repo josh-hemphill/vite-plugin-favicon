@@ -52,8 +52,10 @@ class HtmlTag implements HtmlTagDescriptor {
 	}
 }
 
-export const ViteFaviconsPlugin = (options: Partial<ViteFaviconsPluginOptions>): Plugin => {
-	const lOptions = options;
+type FaviconsPluginArgs = Partial<ViteFaviconsPluginOptions> | ViteFaviconsPluginOptions['logo']
+
+export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin => {
+	const lOptions = typeof options === 'string' ? {logo:options} : options;
 	lOptions.inject = lOptions.inject === undefined ? true : lOptions.inject;
 	lOptions.projectRoot = lOptions.projectRoot === undefined ? process.cwd() : lOptions.projectRoot;
 	const LOGO_PATH = path.resolve(lOptions.logo || path.join('assets','logo.png'));
