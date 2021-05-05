@@ -2,10 +2,10 @@
 
 <!-- cspell: disable bracketsstartstop -->
 
-[![version](https://img.shields.io/github/v/tag/josh-hemphill/vite-plugin-favicon?sort=semver&style=flat-square)](https://github.com/josh-hemphill/vite-plugin-favicon/releases)
-[![NPM](https://img.shields.io/static/v1?label=&message=NPM&color=informational&style=flat-square)](https://npmjs.org/package/vite-plugin-favicon)
-[![Codecov](https://img.shields.io/codecov/c/github/josh-hemphill/vite-plugin-favicon.svg?style=flat-square)](https://codecov.io/gh/josh-hemphill/vite-plugin-favicon)
-[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/vite-plugin-favicon?label=Deps&style=flat-square)](https://libraries.io/npm/vite-plugin-favicon)
+[![version](https://img.shields.io/github/v/tag/josh-hemphill/vite-plugin-favicon?sort=semver&style=?style=plastic&logo=appveyor)](https://github.com/josh-hemphill/vite-plugin-favicon/releases)
+[![NPM](https://img.shields.io/static/v1?label=&message=NPM&color=informational&style=?style=plastic&logo=appveyor)](https://npmjs.org/package/vite-plugin-favicon)
+[![Codecov](https://img.shields.io/codecov/c/github/josh-hemphill/vite-plugin-favicon.svg?style=?style=plastic&logo=appveyor)](https://codecov.io/gh/josh-hemphill/vite-plugin-favicon)
+[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/vite-plugin-favicon?label=Deps&style=?style=plastic&logo=appveyor)](https://libraries.io/npm/vite-plugin-favicon)
 [![Rate on Openbase](https://badges.openbase.io/js/rating/vite-plugin-favicon.svg)](https://openbase.io/js/vite-plugin-favicon?utm_source=embedded&utm_medium=badge&utm_campaign=rate-badge)
 [![Test](https://github.com/josh-hemphill/vite-plugin-favicon/actions/workflows/test.yml/badge.svg)](https://github.com/josh-hemphill/vite-plugin-favicon/actions/workflows/test.yml)
 [![Release](https://github.com/josh-hemphill/vite-plugin-favicon/actions/workflows/release.yml/badge.svg)](https://github.com/josh-hemphill/vite-plugin-favicon/actions/workflows/release.yml)
