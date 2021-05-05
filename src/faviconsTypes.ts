@@ -3,7 +3,7 @@ interface IconOptions {
 	background?: boolean | string;
 	mask?: boolean;
 	overlayGlow?: boolean;
-	ovelayShadow?: boolean;
+	overlayShadow?: boolean;
 }
 
 export interface FaviconOptions {

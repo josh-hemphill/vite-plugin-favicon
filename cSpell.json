@@ -37,7 +37,8 @@
 		"untracked",
 		"vite",
 		"favicons",
-		"favicon's"
+		"favicon's",
+		"resampling",
 	],
 	"flagWords": [
 		"hte"
