@@ -6,7 +6,7 @@ import path from 'path';
 import { getDefaultFaviconConfig } from './faviconsDefaults.js';
 import { parseFragment } from 'parse5';
 
-type FaviconsConfig = favicons.FaviconOptions
+type FaviconsConfig = Partial<favicons.FaviconOptions>
 export type ViteFaviconsPluginOptions = {
 	/** Your source logo (Will default to )
 		@default "assets/logo.png"
