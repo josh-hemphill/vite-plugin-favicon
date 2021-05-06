@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.6...v1.0.7) (2021-05-06)
+
+
+### Bug Fixes
+
+* :bug: files html refs were not being updated ([7c9c534](https://github.com/josh-hemphill/vite-plugin-favicon/commit/7c9c5348aa2cdd873ac622daee6fc95f0c868645))
+
 ## [1.0.6](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.5...v1.0.6) (2021-05-05)
 
 
