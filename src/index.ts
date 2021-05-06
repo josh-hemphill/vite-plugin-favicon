@@ -80,21 +80,24 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 	};
 
 	const tags: HtmlTag[] = [];
-	const assetIds: Set<string> = new Set();
+	const assetIds: Map<string,string> = new Map();
 
 	const rebuildFavicons = async (ctx: PluginContext) => {
 		ctx.addWatchFile(LOGO_PATH);
 		const res = await getFavicons();
 		for (const {name,contents} of res.files) {
-			assetIds.add(ctx.emitFile({type:'asset',name,source:contents}));
+			assetIds.set(name,ctx.emitFile({type:'asset',fileName: name,source:contents}));
 		}
 		for (const {name,contents} of res.images) {
-			assetIds.add(ctx.emitFile({type:'asset',name,source:contents}));
+			assetIds.set(name,ctx.emitFile({type:'asset',name,source:contents}));
 		}
 		for (const tag of res.html) {
 			const node = <{nodeName:string, attrs: [{name: string,value:string}]}><unknown>parseFragment(tag).childNodes[0];
 			tags.push(new HtmlTag(node.nodeName,node.attrs.reduce((acc,v) => {
-				acc[v.name] = v.value;
+				const resolvedValue = assetIds.has(v.value.slice(1))
+					? assetIds.get(v.value.slice(1)) || v.value
+					: v.value;
+				acc[v.name] = resolvedValue;
 				return acc;
 			},<Record<string,string>>{})));
 		}
@@ -104,12 +107,6 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 		name: 'vite-plugin-favicon',
 		async buildStart () {
 			await rebuildFavicons(this);
-		},
-		load ( id ) {
-			if (id === 'virtual-module') {
-				return 'export default "This is virtual!"'; // the source code for "virtual-module"
-			}
-			return null; // other ids should be handled as usually
 		},
 		transformIndexHtml () {
 			if (lOptions.inject) {
