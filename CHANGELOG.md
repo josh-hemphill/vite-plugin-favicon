@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.7...v1.0.8) (2021-05-13)
+
+
+### Bug Fixes
+
+* :bug: don't fail on missing options ([e19a01e](https://github.com/josh-hemphill/vite-plugin-favicon/commit/e19a01ed7fe84bba040f88cc260b479e4d276c94))
+
 ## [1.0.7](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.6...v1.0.7) (2021-05-06)
 
 
