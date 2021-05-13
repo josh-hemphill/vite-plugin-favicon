@@ -67,6 +67,7 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 		developerName = oracle.guessDeveloperName(),
 		developerURL = oracle.guessDeveloperURL(),
 	} = lOptions.favicons || {};
+	lOptions.favicons = lOptions.favicons || {};
 	Object.assign(lOptions.favicons, {
 		appName,
 		appDescription,
