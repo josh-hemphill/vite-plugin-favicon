@@ -105,9 +105,8 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 		}
 		if (!lOptions.inject) {
 			const filePath = path.join(lOptions?.favicons?.path || '', 'webapp.html');
-			for (const tag of res.html) {
-				fs.writeFileSync(filePath, tag);
-			}
+			const output = res.html.join("\n");
+			fs.writeFileSync(filePath, output);
 		}
 	};
 
