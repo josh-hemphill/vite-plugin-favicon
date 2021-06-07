@@ -6,7 +6,6 @@ import path from 'path';
 import { getDefaultFaviconConfig } from './faviconsDefaults.js';
 import { parseFragment } from 'parse5';
 import type { FaviconOptions } from './faviconsTypes.js';
-import * as fs from 'fs';
 
 type FaviconsConfig = Partial<FaviconOptions>
 export type ViteFaviconsPluginOptions = {
@@ -104,9 +103,9 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 			},<Record<string,string>>{})));
 		}
 		if (!lOptions.inject) {
-			const filePath = path.join(lOptions?.favicons?.path || '', 'webapp.html');
-			const output = res.html.join("\n");
-			fs.writeFileSync(filePath, output);
+			const name =  'webapp.html';
+			const contents = res.html.join("\n");
+			assetIds.set(name,ctx.emitFile({type:'asset',fileName: name,source:contents}));
 		}
 	};
 
