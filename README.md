@@ -34,7 +34,7 @@ Add the plugin to your vite config as follows:
 ```javascript
 const ViteFaviconsPlugin = require('vite-plugin-favicon')
 // or ESM
-import { ViteFaviconsPlugin } from "module";
+import { ViteFaviconsPlugin } from 'vite-plugin-favicon';
 
 plugins: [
   ViteFaviconsPlugin()
