@@ -1,4 +1,4 @@
-import type { Plugin, HtmlTagDescriptor } from 'vite';
+import type { Plugin, HtmlTagDescriptor, ResolvedConfig } from 'vite';
 import type { PluginContext } from 'rollup';
 import favicons from 'favicons';
 import Oracle from './oracle.js';
@@ -55,6 +55,7 @@ class HtmlTag implements HtmlTagDescriptor {
 type FaviconsPluginArgs = Partial<ViteFaviconsPluginOptions> | ViteFaviconsPluginOptions['logo']
 
 export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin => {
+	let viteConfig: ResolvedConfig;
 	const lOptions = typeof options === 'string' ? {logo:options} : options;
 	lOptions.inject = lOptions.inject === undefined ? true : lOptions.inject;
 	lOptions.projectRoot = lOptions.projectRoot === undefined ? process.cwd() : lOptions.projectRoot;
@@ -75,8 +76,11 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 		developerName,
 		developerURL,
 	});
-	const faviconConfig = getDefaultFaviconConfig(lOptions);
 	const getFavicons = async () => {
+		if (lOptions && lOptions.favicons) {
+			lOptions.favicons.path = path.join(viteConfig.base, viteConfig.build.assetsDir);
+		}
+		const faviconConfig = getDefaultFaviconConfig(lOptions);
 		return await favicons(LOGO_PATH,faviconConfig);
 	};
 
@@ -86,12 +90,21 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 	const rebuildFavicons = async (ctx: PluginContext) => {
 		ctx.addWatchFile(LOGO_PATH);
 		const res = await getFavicons();
-		for (const {name,contents} of res.files) {
-			assetIds.set(name,ctx.emitFile({type:'asset',fileName: name,source:contents}));
+		// Only emit files if we're doing a build
+		if (viteConfig.command === 'build') {
+			for (const {name, contents} of res.files) {
+				assetIds.set(name, ctx.emitFile({type: 'asset', fileName: name, source: contents}));
+			}
+			for (const {name, contents} of res.images) {
+				assetIds.set(name, ctx.emitFile({type: 'asset', name, source: contents}));
+			}
+			if (!lOptions.inject) {
+				const name = 'webapp.html';
+				const contents = res.html.join("\n");
+				assetIds.set(name, ctx.emitFile({type: 'asset', fileName: name, source: contents}));
+			}
 		}
-		for (const {name,contents} of res.images) {
-			assetIds.set(name,ctx.emitFile({type:'asset',name,source:contents}));
-		}
+		// Parse the HTML into tag objects for later injection
 		for (const tag of res.html) {
 			const node = <{nodeName:string, attrs: [{name: string,value:string}]}><unknown>parseFragment(tag).childNodes[0];
 			tags.push(new HtmlTag(node.nodeName,node.attrs.reduce((acc,v) => {
@@ -108,6 +121,9 @@ export const ViteFaviconsPlugin = (options: FaviconsPluginArgs = {} ): Plugin =>
 		name: 'vite-plugin-favicon',
 		async buildStart () {
 			await rebuildFavicons(this);
+		},
+		configResolved(resolvedConfig: ResolvedConfig) {
+			viteConfig = resolvedConfig;
 		},
 		transformIndexHtml () {
 			if (lOptions.inject) {
