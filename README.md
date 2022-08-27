@@ -166,7 +166,7 @@ to `null` the properties you want to omit.
 ```javascript
 const ViteFaviconsPlugin = require('vite-plugin-favicon')
 // or ESM
-import { ViteFaviconsPlugin } from "module";
+import { ViteFaviconsPlugin } from "vite-plugin-favicon";
 
 plugins: [
   ViteFaviconsPlugin({
