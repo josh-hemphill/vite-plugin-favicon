@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const root = fileURLToPath(new URL('..', import.meta.url))
-const tmp = await mkdtemp(join(tmpdir(), 'vite-plugin-favicon-package-'))
+const tmp = await realpath(await mkdtemp(join(tmpdir(), 'vite-plugin-favicon-package-')))
 const npm = process.env.npm_execpath
 if (!npm) throw new Error('Run with npm run test:package')
 const npmEnv = { ...process.env, npm_config_audit: 'false', npm_config_fund: 'false' }

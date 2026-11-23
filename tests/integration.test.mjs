@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
-import { mkdir, mkdtemp, readFile, readdir, rename, rm, writeFile } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, readdir, realpath, rename, rm, writeFile } from 'node:fs/promises'
 import { createServer as createHttpServer } from 'node:http'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
@@ -31,7 +31,7 @@ function links(page, rel) {
 }
 
 async function fixture(_t, files = {}) {
-  const root = await mkdtemp(join(tmpdir(), 'vite-favicon-tests-'))
+  const root = await realpath(await mkdtemp(join(tmpdir(), 'vite-favicon-tests-')))
   roots.add(root)
   const write = async (file, contents) => {
     const path = join(root, file)
