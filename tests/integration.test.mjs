@@ -421,7 +421,9 @@ for (const name of fixtureNames) {
   test(`${major} build watch recovers after deleting and recreating a source`, { timeout: 22000 }, async (t) => {
     const { root, write } = await fixture(t)
     const watcher = await vite.build(setup(vite, root, {
-      plugins: [favicons({ ids: ['favicon.32'] })], build: { watch: { buildDelay: 25, chokidar: { persistent: false } } },
+      plugins: [favicons({ ids: ['favicon.32'] })],
+      // Exercise rebuilds with deterministic file detection on hosted VMs.
+      build: { watch: { buildDelay: 25, chokidar: { persistent: false, usePolling: true, interval: 50 } } },
     }))
     t.after(() => watcher.close())
     const events = []
