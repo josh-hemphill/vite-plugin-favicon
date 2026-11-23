@@ -1,37 +1,59 @@
-name: Test
+name: Test favicon plugin
 
 on:
-    push:
-        branches:
-            - latest
-            - latest-next
-            - next
-            - beta
-            - "*.x" # maintenance releases branches
+  push:
+    branches: [latest, next, beta, 'codex/**']
+  pull_request:
+  workflow_dispatch:
 
-    pull_request:
-        types:
-            - opened
-            - synchronize
+permissions:
+  contents: read
 
 jobs:
-    test_matrix:
-        strategy:
-            matrix:
-                node-version:
-                    - 12
-                    - 14
-                    - 16 # Becomes active in early April 2021
+  compatibility:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node: ['22.12.0', '22', '24', '26']
+        vite: ['7.3.8', '8.3.8']
+        include:
+          - { os: ubuntu-latest, node: '22.12.0', vite: '7.3.0' }
+          - { os: ubuntu-latest, node: '22.12.0', vite: '8.3.0' }
+          - { os: macos-latest, node: '24', vite: '7.3.8' }
+          - { os: macos-latest, node: '24', vite: '8.3.8' }
+          - { os: windows-latest, node: '24', vite: '7.3.8' }
+          - { os: windows-latest, node: '24', vite: '8.3.8' }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --package-lock=false vite-under-test@npm:vite@${{ matrix.vite }}
+      - run: npm test
+        env:
+          VITE_UNDER_TEST: vite-under-test
+      - run: npm run test:package
+        env:
+          VITE_PACKAGE_VERSION: ${{ matrix.vite }}
 
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v2
-            - run: git config --global user.name github-actions
-            - run: git config --global user.email github-actions@github.com
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v2
-              with:
-                  node-version: ${{ matrix.node-version }}
-            - uses: bahmutov/npm-install@v1
-            - run: npm run test
+  package-managers:
+    strategy:
+      matrix:
+        package-manager: [pnpm, yarn]
+        vite: ['7.3.8', '8.3.8']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run test:package
+        env:
+          PACKAGE_MANAGER: ${{ matrix.package-manager }}
+          VITE_PACKAGE_VERSION: ${{ matrix.vite }}

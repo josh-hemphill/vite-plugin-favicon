@@ -1,3 +1,11 @@
+## 2.0.0-beta.1
+
+- Generate browser and Apple touch icons with Favigen, including filesystem-backed render caching.
+- Serve generated icons in dev, recover from source edits or deletion, and resolve final build URLs for root, subpath, relative, and CDN deployments.
+- Add optional app icons, basic manifest generation, typed companion handoff, and backend HTML fragments.
+- Preserve authored icon links and detect conflicting output paths. See the README for migration from the legacy configuration.
+- Require Node 22.12+ and Vite 7.3+ or 8.3+ within those majors.
+
 ## [1.0.8](https://github.com/josh-hemphill/vite-plugin-favicon/compare/v1.0.7...v1.0.8) (2021-05-13)
 
 
