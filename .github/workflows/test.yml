@@ -2,12 +2,16 @@ name: Test favicon plugin
 
 on:
   push:
-    branches: [latest, next, beta, 'codex/**']
+    branches: [latest, next, beta]
   pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   compatibility:
@@ -31,17 +35,18 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: npm
-      - run: npm ci
-      - run: npm install --no-save --package-lock=false vite-under-test@npm:vite@${{ matrix.vite }}
-      - run: npm test
+      - run: npx --yes npm@11.21.3 ci
+      - run: npx --yes npm@11.21.3 install --no-save --package-lock=false vite-under-test@npm:vite@${{ matrix.vite }}
+      - run: npx --yes npm@11.21.3 test
         env:
           VITE_UNDER_TEST: vite-under-test
-      - run: npm run test:package
+      - run: npx --yes npm@11.21.3 run test:package
         env:
           VITE_PACKAGE_VERSION: ${{ matrix.vite }}
 
   package-managers:
     strategy:
+      fail-fast: false
       matrix:
         package-manager: [pnpm, yarn]
         vite: ['7.3.8', '8.3.8']
@@ -52,8 +57,8 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      - run: npm ci
-      - run: npm run test:package
+      - run: npx --yes npm@11.21.3 ci
+      - run: npx --yes npm@11.21.3 run test:package
         env:
           PACKAGE_MANAGER: ${{ matrix.package-manager }}
           VITE_PACKAGE_VERSION: ${{ matrix.vite }}
