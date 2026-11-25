@@ -441,9 +441,16 @@ for (const name of fixtureNames) {
     await write('assets/logo.svg', artwork('#b32633'))
     const rebuilt = await waitFor('BUNDLE_END', events.indexOf(failure) + 1)
     await waitFor('END', events.indexOf(rebuilt) + 1)
-    const next = links(await readFile(join(root, 'dist/index.html'), 'utf8'))[0].href
-    assert.notEqual(next, original)
-    assert.ok((await readFile(join(root, 'dist', next.slice(1)))).length > 64)
+    // An additional watch event can start clearing dist while we read the previous output.
+    const icon = await eventually(async () => {
+      try {
+        const next = links(await readFile(join(root, 'dist/index.html'), 'utf8'), 'icon')[0]?.href
+        if (next && next !== original) return await readFile(join(root, 'dist', next.slice(1)))
+      } catch (error) {
+        if (error.code !== 'ENOENT') throw error
+      }
+    }, 'the recovered HTML did not reference a new icon on disk')
+    assert.deepEqual(pngDimensions(icon), [32, 32])
   })
 
   test(`${major} coexists with vite-plugin-pwa as the only manifest owner`, async (t) => {
