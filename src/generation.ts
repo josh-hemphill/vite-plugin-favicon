@@ -1,8 +1,7 @@
 import { createHash } from 'node:crypto'
 import { readFile, stat } from 'node:fs/promises'
 import { dirname, extname } from 'node:path'
-import { createDiskCache, planIcons, prepareSource, renderIcon } from 'favigen'
-import type { IconOverride, PreparedSource, RenderedIcon } from 'favigen'
+import type { IconOverride, PreparedSource, RenderedIcon } from '@jo-hemphill/favigen'
 import { outputName, pluginName, rootIcoId } from './options.js'
 import type { IconOverride as SourceOverride, ResolvedOptions } from './options.js'
 
@@ -64,6 +63,7 @@ async function findSource(options: ResolvedOptions): Promise<string> {
 }
 
 export function createGenerator(options: ResolvedOptions, warn: (message: string) => void) {
+  const { createDiskCache, planIcons, prepareSource, renderIcon } = options.favigen
   const cacheError = (error: Error) => warn(`Icon cache: ${error.message}`)
   const cache = options.cacheDir === false ? false : createDiskCache(options.cacheDir, { onError: cacheError })
   const previous = new Map<string, { digest: string; source: PreparedSource }>()

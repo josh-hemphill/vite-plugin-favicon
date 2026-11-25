@@ -1,6 +1,6 @@
 ## 2.0.0-beta.1
 
-- Generate browser and Apple touch icons with Favigen, including filesystem-backed render caching.
+- Generate browser and Apple touch icons with `@jo-hemphill/favigen` 2.0.0 from the npm registry, including filesystem-backed render caching.
 - Serve generated icons in dev, recover from source edits or deletion, and resolve final build URLs for root, subpath, relative, and CDN deployments.
 - Add optional app icons, basic manifest generation, typed companion handoff, and backend HTML fragments.
 - Preserve authored icon links and detect conflicting output paths. See the README for migration from the legacy configuration.

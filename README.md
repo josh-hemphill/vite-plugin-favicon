@@ -68,9 +68,7 @@ For backend templates, use `inject: false` with `htmlFragment: { file: 'meta/fav
 | Automatically generated manifest or hardcoded URLs | Enable basic mode or configure a manifest owner. Use the generated links or companion API for content-digested paths. |
 | Vite below 7.3 or Node below 22.12 | Stay on 1.x while upgrading the application. |
 
-The npm smoke checks use npm 11. npm 12 blocks remote tarball dependencies under its default policy, so use npm 11, pnpm 10, or Yarn 4 with the node-modules linker for this beta.
-
-The plugin pins the maintainer’s [Favigen 1.2.0 tarball](https://github.com/josh-hemphill/favigen/releases/tag/v1.2.0) and renders with Sharp’s native optional packages. Allow installs to resolve those optional dependencies for the build machine. The legacy compatibility code in Favigen still brings deprecated transitive packages. Track that work in [issue #26](https://github.com/josh-hemphill/vite-plugin-favicon/issues/26).
+The plugin uses the published [`@jo-hemphill/favigen` 2.0.0](https://www.npmjs.com/package/@jo-hemphill/favigen/v/2.0.0). It processes raster images with Jimp and uses WebAssembly codecs for SVG and WebP. The plugin loads Favigen through Vite’s async configuration hook, so CommonJS Vite configs can still call the plugin factory directly.
 
 ## Verify locally
 

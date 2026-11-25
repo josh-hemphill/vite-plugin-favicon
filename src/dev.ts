@@ -1,6 +1,6 @@
 import { resolve, sep } from 'node:path'
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import type { IconPublication } from 'favigen'
+import type { IconPublication } from '@jo-hemphill/favigen'
 import type { ViteDevServer } from 'vite'
 import { describe, digest, watchPaths } from './generation.js'
 import type { Generation } from './generation.js'
@@ -200,7 +200,7 @@ export function createDev(
       }
       if (ready) {
         const bytes = isManifest ? manifest!.serve(ready.publication) : htmlFragment(
-          ready.publication, ready.manifestAvailable ? devUrl(options, manifestFile) : undefined,
+          options.favigen.iconTags(ready.publication), ready.manifestAvailable ? devUrl(options, manifestFile) : undefined,
         )
         respond(req, res, {
           bytes, etag: digest(bytes), type: isManifest ? 'application/manifest+json; charset=utf-8' : 'text/html; charset=utf-8',
@@ -237,7 +237,7 @@ export function createDev(
       const url = new URL(path, 'https://vite-favicon.invalid')
       const base = devUrl(options, '')
       if (!url.pathname.startsWith(base)) url.pathname = base + url.pathname.replace(/^\//, '')
-      return injectLinks(html, ready.publication, href, path, url.href, 'serve', warn).html
+      return injectLinks(html, options.favigen.iconTags(ready.publication), href, path, url.href, 'serve', warn).html
     },
   }
 }

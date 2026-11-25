@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@types/node": "^22.19.0",
-    "favigen": "https://github.com/josh-hemphill/favigen/releases/download/v1.2.0/favigen-1.2.0.tgz",
+    "@jo-hemphill/favigen": "2.0.0",
     "parse5": "^7.3.0"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 import { isAbsolute, join, resolve } from 'node:path'
-import type { IconOverride as FavigenOverride, IconRole, PlanOptions } from 'favigen'
+import type { IconOverride as FavigenOverride, IconRole, PlanOptions } from '@jo-hemphill/favigen'
 import type { ResolvedConfig } from 'vite'
 
 export type IconOverride = Omit<FavigenOverride, 'source'> & { readonly source?: string }
@@ -43,6 +43,7 @@ export interface ViteFaviconsPluginOptions extends Pick<PlanOptions, 'profile' |
 }
 
 export interface ResolvedOptions {
+  readonly favigen: typeof import('@jo-hemphill/favigen')
   readonly config: ResolvedConfig
   readonly profile: NonNullable<PlanOptions['profile']>
   readonly ids?: PlanOptions['ids']
@@ -114,6 +115,7 @@ function resolveOverrides<K extends string>(
 export function resolveOptions(
   input: ViteFaviconsPluginOptions | string,
   config: ResolvedConfig,
+  favigen: ResolvedOptions['favigen'],
 ): ResolvedOptions {
   const initial = typeof input === 'string' ? { source: input } : input
   if (!initial || typeof initial !== 'object' || Array.isArray(initial)) fail('Use a source path or an options object.')
@@ -158,7 +160,7 @@ export function resolveOptions(
   }
   const outputDir = initial.outputDir ?? (config.build.assetsDir ? `${config.build.assetsDir}/favicons` : 'favicons')
   return {
-    config, sources, candidates, profile, ids, variants, targets, manifest,
+    config, favigen, sources, candidates, profile, ids, variants, targets, manifest,
     source: source ?? logo,
     render: initial.render,
     outputDir: outputName(outputDir, 'outputDir'),

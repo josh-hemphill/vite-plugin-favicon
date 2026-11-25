@@ -1,4 +1,4 @@
-import type { IconPublication } from 'favigen'
+import type { IconPublication } from '@jo-hemphill/favigen'
 import type { Plugin } from 'vite'
 import { createDev } from './dev.js'
 import { createGenerator, digest, watchPaths } from './generation.js'
@@ -9,7 +9,7 @@ import type { ResolvedOptions, ViteFaviconsPluginOptions } from './options.js'
 import { bindGeneration, createManifest, documentUrl, publicCollision } from './publication.js'
 import type { ManifestOutput } from './publication.js'
 
-export type { IconPublication, PublishedIcon } from 'favigen'
+export type { IconPublication, PublishedIcon } from '@jo-hemphill/favigen'
 export type { BasicManifestOptions, HtmlFragmentOptions, IconOverride, IconUrlContext, ViteFaviconsPluginOptions } from './options.js'
 
 export interface ViteFavigenApi {
@@ -77,11 +77,12 @@ export function ViteFaviconsPlugin(input: ViteFaviconsPluginOptions | string = {
       order: 'post',
       handler(config) { requestedBase = config.base },
     },
-    configResolved(config) {
+    async configResolved(config) {
       if (config.plugins.filter((plugin) => plugin.name === pluginName).length > 1) {
         fail('Configure one favicon plugin instance per Vite project.')
       }
-      options = resolveOptions(input, config)
+      // Favigen is ESM-only. Vite can await it even when the plugin factory is loaded via require().
+      options = resolveOptions(input, config, await import('@jo-hemphill/favigen'))
       const owners = config.plugins.flatMap((plugin) => {
         const claim = plugin.api?.favigenManifest as ViteFavigenManifestOwner | undefined
         if (!claim) return []
@@ -170,14 +171,16 @@ export function ViteFaviconsPlugin(input: ViteFaviconsPluginOptions | string = {
         if (options.htmlFragment) {
           const { file, referrerFile } = options.htmlFragment
           extras.push({ fileName: file, source: htmlFragment(
-            bindGeneration(options, generation, 'build', referrerFile), manifest?.href(referrerFile),
+            options.favigen.iconTags(bindGeneration(options, generation, 'build', referrerFile)),
+            manifest?.href(referrerFile),
           ) })
         }
         if (options.inject) {
           for (const [file, entry] of Object.entries(bundle)) {
             if (!file.endsWith('.html') || entry.type !== 'asset') continue
             const source = Buffer.from(entry.source).toString()
-            const result = injectLinks(source, bindGeneration(options, generation, 'build', file),
+            const publication = bindGeneration(options, generation, 'build', file)
+            const result = injectLinks(source, options.favigen.iconTags(publication),
               manifest?.href(file), file, manifest?.documentUrl(file) ?? documentUrl(options, file), 'build', warn)
             if (result.tags.length) {
               pending.set(file, result.html)

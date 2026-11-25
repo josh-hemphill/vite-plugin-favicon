@@ -1,5 +1,3 @@
-import { iconTags } from 'favigen'
-import type { IconPublication } from 'favigen'
 import { parse } from 'parse5'
 import type { DefaultTreeAdapterTypes } from 'parse5'
 import { fail } from './options.js'
@@ -47,20 +45,18 @@ function serialize(tags: readonly Tag[]): string {
     .map(([name, value]) => `${name}="${escapeAttribute(value)}"`).join(' ')}>`).join('\n')
 }
 
-function tagsFor(publication: IconPublication, manifestHref?: string): Tag[] {
-  const tags: Tag[] = iconTags(publication)
-  if (manifestHref) tags.push({ attrs: { rel: 'manifest', href: manifestHref } })
-  return tags
+function withManifest(tags: readonly Tag[], manifestHref?: string): readonly Tag[] {
+  return manifestHref ? [...tags, { attrs: { rel: 'manifest', href: manifestHref } }] : tags
 }
 
-export function htmlFragment(publication: IconPublication, manifestHref?: string): string {
-  const links = serialize(tagsFor(publication, manifestHref))
+export function htmlFragment(icons: readonly Tag[], manifestHref?: string): string {
+  const links = serialize(withManifest(icons, manifestHref))
   return links ? links + '\n' : ''
 }
 
 export function injectLinks(
   html: string,
-  publication: IconPublication,
+  icons: readonly Tag[],
   manifestHref: string | undefined,
   file: string,
   documentUrl: string,
@@ -68,7 +64,7 @@ export function injectLinks(
   warn: (message: string) => void,
 ): { html: string; tags: Tag[] } {
   const doc = readDocument(html)
-  const tags = tagsFor(publication, manifestHref).filter(({ attrs }) => {
+  const tags = withManifest(icons, manifestHref).filter(({ attrs }) => {
     const rel = attrs.rel
     const authored = doc.links.some((link) => hasRel(link, rel)
       || (rel === 'apple-touch-icon' && hasRel(link, 'apple-touch-icon-precomposed')))

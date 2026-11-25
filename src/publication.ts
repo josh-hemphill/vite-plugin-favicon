@@ -1,7 +1,6 @@
 import { readdir, stat } from 'node:fs/promises'
 import { join, posix } from 'node:path'
-import { bindIcons, buildBasicManifest } from 'favigen'
-import type { IconPublication } from 'favigen'
+import type { IconPublication } from '@jo-hemphill/favigen'
 import { missing } from './generation.js'
 import type { GeneratedIcon, Generation } from './generation.js'
 import { fail, manifestFile } from './options.js'
@@ -56,7 +55,7 @@ export function bindGeneration(
   referrer = 'index.html',
   icons: readonly GeneratedIcon[] = generation.icons,
 ): IconPublication {
-  return bindIcons(icons, new Map(icons.map(({ id, fileName }) => {
+  return options.favigen.bindIcons(icons, new Map(icons.map(({ id, fileName }) => {
     const defaultUrl = mode === 'serve' ? devUrl(options, fileName) : assetUrl(options, fileName, referrer)
     const url = mode === 'build' && options.resolveIconUrl
       ? staticReference(options.resolveIconUrl({ outputFileName: fileName, referrerFile: referrer, defaultUrl }), 'resolveIconUrl')
@@ -110,7 +109,7 @@ export function createManifest(options: ResolvedOptions, requestedBase: string |
     manifestUrl: URL,
     startUrl: string,
     scope: string,
-  ) => JSON.stringify(buildBasicManifest(publication, {
+  ) => JSON.stringify(options.favigen.buildBasicManifest(publication, {
     ...payload, appUrl: appUrl.href, manifestUrl: manifestUrl.href, startUrl, scope,
   }), null, 2) + '\n'
 

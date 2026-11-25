@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict'
-import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
 import { mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -25,17 +24,18 @@ function run(args, cwd = tmp, capture = false, env = process.env) {
 
 try {
   const sourcePackage = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
-  const tarballUrl = sourcePackage.dependencies.favigen
-  const response = await fetch(tarballUrl, { signal: AbortSignal.timeout(30000) })
-  assert.ok(response.ok, `Favigen tarball download failed: ${response.status}`)
-  const release = Buffer.from(await response.arrayBuffer())
-  assert.equal(createHash('sha256').update(release).digest('hex'),
-    'e50ee9958680cb3b79ef11eb878bfc7f6c7b694a8b9bbccedbaa7451856f41f6')
+  const rendererName = '@jo-hemphill/favigen'
+  const rendererPath = `node_modules/${rendererName}`
+  const rendererVersion = sourcePackage.dependencies[rendererName]
   const lock = JSON.parse(await readFile(join(root, 'package-lock.json'), 'utf8'))
-  assert.equal(lock.packages['node_modules/favigen'].integrity,
-    'sha512-' + createHash('sha512').update(release).digest('base64'))
+  const renderer = lock.packages[rendererPath]
+  assert.ok(renderer)
+  assert.equal(renderer.version, rendererVersion)
+  assert.match(renderer.resolved, /^https:\/\/registry\.npmjs\.org\/@jo-hemphill\/favigen\/-\//)
+  assert.match(renderer.integrity, /^sha512-/)
 
-  const [pack] = JSON.parse(run([npm, 'pack', '--json', '--pack-destination', tmp], root, true, npmEnv))
+  const packed = JSON.parse(run([npm, 'pack', '--json', '--pack-destination', tmp], root, true, npmEnv))
+  const pack = Array.isArray(packed) ? packed[0] : packed[sourcePackage.name]
   assert.ok(pack.files.some(({ path }) => path === 'dist/index.d.cts'))
   const vite = process.env.VITE_PACKAGE_VERSION ?? '8.3.8'
   const install = { private: true, dependencies: { 'vite-plugin-favicon': `file:./${pack.filename}`, vite } }
@@ -44,7 +44,12 @@ try {
   if (manager === 'npm') {
     run([npm, 'install'], tmp, false, npmEnv)
     const consumerLock = JSON.parse(await readFile(join(tmp, 'package-lock.json'), 'utf8'))
-    assert.equal(consumerLock.packages['node_modules/favigen'].resolved, tarballUrl)
+    const plugin = consumerLock.packages['node_modules/vite-plugin-favicon']
+    const installedRenderer = consumerLock.packages[rendererPath]
+    assert.equal(plugin.dependencies[rendererName], rendererVersion)
+    assert.equal(installedRenderer.resolved, renderer.resolved)
+    assert.equal(installedRenderer.integrity, renderer.integrity)
+    assert.equal(consumerLock.packages['node_modules/favigen'], undefined)
     run([npm, 'ci'], tmp, false, npmEnv)
   } else {
     const managers = {
@@ -58,7 +63,8 @@ try {
     if (manager === 'yarn') await writeFile(join(tmp, '.yarnrc.yml'), 'nodeLinker: node-modules\nenableGlobalCache: false\nglobalFolder: ./.yarn/global\n')
     const installOptions = manager === 'pnpm' ? ['--store-dir', join(tmp, '.pnpm-store')] : []
     run([...managerArgs, 'install', ...installOptions], tmp, false, managerEnv)
-    assert.ok((await readFile(join(tmp, selected.lockFile), 'utf8')).includes(tarballUrl))
+    const locator = manager === 'yarn' ? `${rendererName}@npm:${rendererVersion}` : `${rendererName}@${rendererVersion}`
+    assert.ok((await readFile(join(tmp, selected.lockFile), 'utf8')).includes(locator))
     await rm(join(tmp, 'node_modules'), { recursive: true, force: true })
     run([...managerArgs, 'install', selected.frozen, ...installOptions], tmp, false, managerEnv)
   }
