@@ -1,4 +1,4 @@
-## 2.0.0-beta.1
+## 2.0.0
 
 - Generate browser and Apple touch icons with `@jo-hemphill/favigen` 2.0.0 from the npm registry, including filesystem-backed render caching.
 - Serve generated icons in dev, recover from source edits or deletion, and resolve final build URLs for root, subpath, relative, and CDN deployments.

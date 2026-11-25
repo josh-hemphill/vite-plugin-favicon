@@ -4,10 +4,10 @@ Generate browser and Apple touch icons from one local image. The plugin serves t
 
 ## Quick start
 
-Install a 2.x release or a 2.x package tarball. For a published prerelease, install the exact prerelease version or the `next` tag.
+Install the 2.x release from npm.
 
 ```sh
-npm install --save-dev ./vite-plugin-favicon-2.0.0-beta.1.tgz
+npm install --save-dev vite-plugin-favicon@^2
 ```
 
 ```ts
